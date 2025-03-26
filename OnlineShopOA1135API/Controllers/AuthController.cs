@@ -39,7 +39,7 @@ namespace OnlineShopOA1135API.Controllers
         }
 
         [HttpPost("AddNewUser")]
-        public async Task<ActionResult> AddNewUser(UserModel User) // опять с этой виртуальной хуйней проблемы - добавить операторов и разьезабать эти виртуальные ссылки нахуй
+        public async Task<ActionResult> AddNewUser(UserModel User) 
         {
             var newUser = new User { Id = User.Id, Login = User.Login, Password = User.Password, RoleId = User.RoleId };
             if (string.IsNullOrEmpty(newUser.Login))
