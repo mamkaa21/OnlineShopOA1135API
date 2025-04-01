@@ -81,7 +81,9 @@ public partial class OnlineShopOa1135Context : DbContext
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.CountProduct).HasColumnType("int(11)");
-            entity.Property(e => e.PriceProduct).HasPrecision(10);
+            entity.Property(e => e.DateCreated).HasColumnType("datetime");
+            entity.Property(e => e.DateStatusUpdated).HasColumnType("datetime");
+            entity.Property(e => e.Status).HasMaxLength(45);
             entity.Property(e => e.UserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("User_Id");

@@ -13,6 +13,7 @@ namespace OnlineShopOA1135API.Controllers
             this.context = context;
         }
 
+
        //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
 
 

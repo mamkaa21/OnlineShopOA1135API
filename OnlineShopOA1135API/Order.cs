@@ -11,7 +11,11 @@ public partial class Order
 
     public int? CountProduct { get; set; }
 
-    public decimal? PriceProduct { get; set; }
+    public string? Status { get; set; }
+
+    public DateTime? DateCreated { get; set; }
+
+    public DateTime? DateStatusUpdated { get; set; }
 
     public virtual User? User { get; set; }
 }
