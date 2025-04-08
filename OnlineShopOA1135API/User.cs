@@ -21,6 +21,19 @@ public partial class User
 
     public virtual Role? Role { get; set; }
 
+    public static explicit operator UserModel(User user)
+    {
+        return new UserModel
+        {
+            Id = user.Id,
+            RoleId = user.RoleId,
+            Login = user.Login,
+            Password = user.Password,
+            Name = user.Name,
+            Email = user.Email, 
+            Orders = user.Orders,
+        };
+    }
 }
 
 public partial class UserModel
