@@ -33,7 +33,7 @@ namespace OnlineShopOA1135API.Controllers
                 }
                 else
                 {                   
-                    return Ok("Успешно!");
+                    return Ok((UserModel) user);
                 }
             }
         }
