@@ -32,7 +32,7 @@ namespace OnlineShopOA1135API.Controllers
                     return NotFound("Неверный пароль");
                 }
                 else
-                {
+                {                   
                     return Ok("Успешно!");
                 }
             }
