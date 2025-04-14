@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopOA1135API.Controllers
 {
@@ -23,12 +24,12 @@ namespace OnlineShopOA1135API.Controllers
         }
 
         [HttpPost("CreateGoods")]
-        public async Task<ActionResult> CreateGoods(Good good)
+        public async Task<ActionResult> CreateGoods(GoodModel good)
         {
             try
             {
-                good.Category = null;
-                context.Goods.Add(good);
+                var goodNew = new Good { Title = good.Title, CategoryId = good.CategoryId, Price = good.Price, Amount = good.Amount, Description =  good.Description, Review = good.Review, Rating = good.Rating };
+                context.Goods.Add(goodNew);
                 await context.SaveChangesAsync();
                 return Ok("Успешно");
             }
