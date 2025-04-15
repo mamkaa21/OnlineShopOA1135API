@@ -28,7 +28,9 @@ namespace OnlineShopOA1135API.Controllers
         {
             try
             {
-                var goodNew = new Good { Title = good.Title, CategoryId = good.CategoryId, Price = good.Price, Amount = good.Amount, Description =  good.Description, Review = good.Review, Rating = good.Rating };
+                var goodNew = new Good { Title = good.Title, 
+                    CategoryId = good.CategoryId, Price = good.Price,
+                    Amount = good.Amount, Description =  good.Description, Image = good.Image, Review = good.Review, Rating = good.Rating };
                 context.Goods.Add(goodNew);
                 await context.SaveChangesAsync();
                 return Ok("Успешно");

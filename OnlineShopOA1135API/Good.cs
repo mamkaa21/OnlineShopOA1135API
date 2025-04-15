@@ -40,7 +40,7 @@ public class GoodModel
 
     public string? Description { get; set; }
 
-   // public byte[]? Image { get; set; }
+    public byte[]? Image { get; set; }
 
     public string? Review { get; set; }
 
