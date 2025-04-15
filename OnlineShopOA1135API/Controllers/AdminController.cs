@@ -19,7 +19,7 @@ namespace OnlineShopOA1135API.Controllers
         public async Task<List<Good>> GetGoods()
         {
             await Task.Delay(10);
-            var goods = context.Goods.ToList();
+            var goods = context.Goods.Include(s => s.Category).ToList();
             return goods;
         }
 
