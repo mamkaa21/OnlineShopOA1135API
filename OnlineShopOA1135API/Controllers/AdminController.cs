@@ -129,6 +129,54 @@ namespace OnlineShopOA1135API.Controllers
         }
 
 
+        //запросы с юзерами
+        [HttpPost("CreateUsers")]
+        public async Task<ActionResult> CreateUsers(User user)
+        {
+            try
+            {
+               
+                context.Users.Add(user);
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("EditUsers")]
+        public async Task<ActionResult> EditUsers(User user)
+        {
+            try
+            {
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("DeleteUsers")]
+        public async Task<ActionResult> DeleteUsers(User user)
+        {
+            try
+            {
+                context.Users.Remove(user);
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
         //запросы к заказу(order)
         [HttpGet("GetOrder")] 
         public async Task<List<Order>> GetOrder()
