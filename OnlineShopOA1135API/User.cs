@@ -52,3 +52,4 @@ public partial class UserModel
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }
+

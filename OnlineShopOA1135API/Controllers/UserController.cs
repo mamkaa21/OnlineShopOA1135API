@@ -49,6 +49,34 @@ namespace OnlineShopOA1135API.Controllers
         //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
 
 
+
     }
+
+    public partial class ActiveUser
+    {
+        private ActiveUser() { }
+
+        //static ActiveUser instance;
+        //public static ActiveUser Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //            instance = new ActiveUser();
+        //        return instance;
+        //    }
+        //}
+        private User user;
+        //public User GetUser()
+        //{
+        //    return user;
+        //}
+
+        //public void SetUser(User value)
+        //{
+        //    user = value;
+        //}
+    }
+
 }
 
