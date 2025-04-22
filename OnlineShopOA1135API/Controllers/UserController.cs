@@ -13,8 +13,40 @@ namespace OnlineShopOA1135API.Controllers
             this.context = context;
         }
 
+        //[HttpPost("CreateOrder")]
+        //  public async Task<ActionResult> CreateOrder(Order order) { } надо думать сука
 
-       //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
+        [HttpPut("GetRatingForGood")] //возможность поставить оценку товару??
+        public async Task<ActionResult> GetRatingForGood(Good good)
+        {
+            try
+            {
+                context.Goods.Update(good); //типа обновляем оценку у товара хаха
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPut("CreateReviewByGood")]
+        public async Task<ActionResult> CreateReviewByGood(Good good)
+        {
+            try
+            {
+                context.Goods.Update(good); //типа добавили и обновили товар - теперь у него есть отзыв
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
 
 
     }

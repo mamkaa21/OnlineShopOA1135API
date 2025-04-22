@@ -134,8 +134,7 @@ namespace OnlineShopOA1135API.Controllers
         public async Task<ActionResult> CreateUsers(User user)
         {
             try
-            {
-               
+            {              
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
                 return Ok("Успешно");
@@ -185,6 +184,12 @@ namespace OnlineShopOA1135API.Controllers
             var order = context.Orders.ToList();
             return order;
         }
+
+   
+       
+
+
+
 
         [HttpPut("UpdateStatusOrder")] //скорее всего будет чекбок = если галка есть, то заказ помечается как выполненым и "удаляется" и переносится в графу выполненных заказов/история
         public async Task<ActionResult> UpdateStatusOrder(Order order)
