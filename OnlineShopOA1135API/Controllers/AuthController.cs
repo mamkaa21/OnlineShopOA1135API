@@ -48,24 +48,24 @@ namespace OnlineShopOA1135API.Controllers
                 }
                 else
                 {
-                    string role = user.Role.Title;
-                    int id = user.Id;
+                    //string role = user.Role.Title;
+                    //int id = user.Id;
 
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, id.ToString()),
-                        new Claim(ClaimTypes.Role, role)
-                    };
-                    var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    //кладём полезную нагрузку
-                    claims: claims,
-                    //устанавливаем время жизни токена 2 минуты
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    //var claims = new List<Claim>
+                    //{
+                    //    new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                    //    new Claim(ClaimTypes.Role, role)
+                    //};
+                    //var jwt = new JwtSecurityToken(
+                    //issuer: AuthOptions.ISSUER,
+                    //audience: AuthOptions.AUDIENCE,
+                    ////кладём полезную нагрузку
+                    //claims: claims,
+                    ////устанавливаем время жизни токена 2 минуты
+                    //expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                    //signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
-                    string token = new JwtSecurityTokenHandler().WriteToken(jwt);
+                    //string token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
                     //return Ok(new ResponceTokenAndEmployee
                     //{

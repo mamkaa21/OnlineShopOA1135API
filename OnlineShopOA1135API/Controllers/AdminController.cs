@@ -57,7 +57,7 @@ namespace OnlineShopOA1135API.Controllers
             }
         }
 
-        [HttpDelete("DeleteGoods")]
+        [HttpPost("DeleteGoods")]
         public async Task<ActionResult> DeleteGoods(Good good)
         {
             try
