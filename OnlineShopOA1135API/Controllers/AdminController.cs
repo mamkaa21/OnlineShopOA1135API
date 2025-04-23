@@ -23,6 +23,7 @@ namespace OnlineShopOA1135API.Controllers
             return goods;
         }
 
+
         [HttpPost("CreateGoods")]
         public async Task<ActionResult> CreateGoods(GoodModel good)
         {

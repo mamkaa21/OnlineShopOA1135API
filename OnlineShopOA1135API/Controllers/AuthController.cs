@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.Eventing.Reader;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace OnlineShopOA1135API.Controllers
 {
@@ -10,9 +14,20 @@ namespace OnlineShopOA1135API.Controllers
     public class AuthController : ControllerBase
     {
         readonly OnlineShopOa1135Context context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AuthController(OnlineShopOa1135Context context)
         {
             this.context = context;
+          
+        }
+
+        public class AuthOptions
+        {
+            public const string ISSUER = "MyAuthServer"; // издатель токена
+            public const string AUDIENCE = "MyAuthClient"; // потребитель токена
+            const string KEY = "mysupersecret_secretsecretsecretkey!123";   // ключ для шифрации
+            public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
         }
 
         [HttpPost("CheckAccountIsExist")]
@@ -32,11 +47,44 @@ namespace OnlineShopOA1135API.Controllers
                     return NotFound("Неверный пароль");
                 }
                 else
-                {                   
+                {
+                    string role = user.Role.Title;
+                    int id = user.Id;
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                        new Claim(ClaimTypes.Role, role)
+                    };
+                    var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    //кладём полезную нагрузку
+                    claims: claims,
+                    //устанавливаем время жизни токена 2 минуты
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                    string token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+                    //return Ok(new ResponceTokenAndEmployee
+                    //{
+                    //    Token = token,
+                    //    Role = role,
+                    //    Employee = user
+                    //});
                     return Ok((UserModel) user);
                 }
             }
         }
+
+        //public class ResponceTokenAndEmployee
+        //{
+        //    public string Token { get; set; }
+        //    public string Role { get; set; }
+        //    public User User { get; set; }
+        //}
+
 
         [HttpPost("AddNewUser")]
         public async Task<ActionResult> AddNewUser(UserModel User) 
