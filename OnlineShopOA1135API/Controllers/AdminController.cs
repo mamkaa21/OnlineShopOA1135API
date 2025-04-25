@@ -6,7 +6,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopOA1135API.Controllers
 {
-    [Authorize]
+   
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -25,7 +25,7 @@ namespace OnlineShopOA1135API.Controllers
             return goods;
         }
 
-        // [Authorize] тут роль админа написать и на каждое!!!
+        [Authorize(Roles = "админ")]
         [HttpPost("CreateGoods")]
         public async Task<ActionResult> CreateGoods(GoodModel good)
         {
@@ -43,7 +43,7 @@ namespace OnlineShopOA1135API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Roles = "админ")]
         [HttpPut("EditGoods")]
         public async Task<ActionResult> EditGoods(Good good)
         {
@@ -59,6 +59,7 @@ namespace OnlineShopOA1135API.Controllers
             }
         }
 
+        [Authorize(Roles = "админ")]
         [HttpPost("DeleteGoods")]
         public async Task<ActionResult> DeleteGoods(Good good)
         {
@@ -84,6 +85,7 @@ namespace OnlineShopOA1135API.Controllers
             return categories;
         }
 
+        [Authorize(Roles = "админ")]
         [HttpPost("CreateCategories")]
         public async Task<ActionResult> CreateCategories(Category category)
         {
@@ -101,6 +103,7 @@ namespace OnlineShopOA1135API.Controllers
 
         }
 
+        [Authorize(Roles = "админ")]
         [HttpPut("EditCategpries")]
         public async Task<ActionResult> EditCategories(Category category)
         {
@@ -116,6 +119,7 @@ namespace OnlineShopOA1135API.Controllers
             }
         }
 
+        [Authorize(Roles = "админ")]
         [HttpDelete("DeleteCategories")]
         public async Task<ActionResult> DeleteCategories(Category category)
         {
@@ -133,6 +137,7 @@ namespace OnlineShopOA1135API.Controllers
 
 
         //запросы с юзерами
+        [Authorize(Roles = "админ")]
         [HttpPost("CreateUsers")]
         public async Task<ActionResult> CreateUsers(User user)
         {
@@ -148,6 +153,7 @@ namespace OnlineShopOA1135API.Controllers
             }
         }
 
+        [Authorize(Roles = "админ")]
         [HttpPut("EditUsers")]
         public async Task<ActionResult> EditUsers(User user)
         {
@@ -163,6 +169,7 @@ namespace OnlineShopOA1135API.Controllers
             }
         }
 
+        [Authorize(Roles = "админ")]
         [HttpDelete("DeleteUsers")]
         public async Task<ActionResult> DeleteUsers(User user)
         {
