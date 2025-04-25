@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -37,7 +38,7 @@ namespace OnlineShopOA1135API.Controllers
             if (string.IsNullOrEmpty(newUser.Login) || string.IsNullOrEmpty(newUser.Password))
                 return BadRequest("Логин или пароль не иожет быть пустым");
 
-            var user = await context.Users.FirstOrDefaultAsync(s => s.Login == newUser.Login);
+            var user = await context.Users.Include(s=>s.Role).FirstOrDefaultAsync(s => s.Login == newUser.Login);
             if (user == null)
                 return NotFound("Неверный логин");
             else
@@ -48,32 +49,32 @@ namespace OnlineShopOA1135API.Controllers
                 }
                 else
                 {
-                    //string role = user.Role.Title;
-                    //int id = user.Id;
+                    string role = user.Role.Title;
+                    int id = user.Id;
 
-                    //var claims = new List<Claim>
-                    //{
-                    //    new Claim(ClaimTypes.NameIdentifier, id.ToString()),
-                    //    new Claim(ClaimTypes.Role, role)
-                    //};
-                    //var jwt = new JwtSecurityToken(
-                    //issuer: AuthOptions.ISSUER,
-                    //audience: AuthOptions.AUDIENCE,
-                    ////кладём полезную нагрузку
-                    //claims: claims,
-                    ////устанавливаем время жизни токена 2 минуты
-                    //expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-                    //signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                        new Claim(ClaimTypes.Role, role)
+                    };
+                    var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    //кладём полезную нагрузку
+                    claims: claims,
+                    //устанавливаем время жизни токена 2 минуты
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(20)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
-                    //string token = new JwtSecurityTokenHandler().WriteToken(jwt);
-
+                    string token = new JwtSecurityTokenHandler().WriteToken(jwt);
+                    return Ok(token);
                     //return Ok(new ResponceTokenAndEmployee
                     //{
                     //    Token = token,
                     //    Role = role,
                     //    Employee = user
                     //});
-                    return Ok((UserModel) user);
+                  // return Ok((UserModel) user);
                 }
             }
         }
@@ -85,7 +86,7 @@ namespace OnlineShopOA1135API.Controllers
         //    public User User { get; set; }
         //}
 
-
+        
         [HttpPost("AddNewUser")]
         public async Task<ActionResult> AddNewUser(UserModel User) 
         {

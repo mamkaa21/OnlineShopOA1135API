@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace OnlineShopOA1135API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -23,7 +25,7 @@ namespace OnlineShopOA1135API.Controllers
             return goods;
         }
 
-
+        // [Authorize] тут роль админа написать и на каждое!!!
         [HttpPost("CreateGoods")]
         public async Task<ActionResult> CreateGoods(GoodModel good)
         {

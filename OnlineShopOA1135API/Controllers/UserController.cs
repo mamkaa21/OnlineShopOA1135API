@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace OnlineShopOA1135API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -48,34 +51,12 @@ namespace OnlineShopOA1135API.Controllers
 
         //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
 
-
-
-    }
-
-    public partial class ActiveUser
-    {
-        private ActiveUser() { }
-
-        //static ActiveUser instance;
-        //public static ActiveUser Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //            instance = new ActiveUser();
-        //        return instance;
-        //    }
-        //}
-        private User user;
-        //public User GetUser()
-        //{
-        //    return user;
-        //}
-
-        //public void SetUser(User value)
-        //{
-        //    user = value;
-        //}
+        [HttpGet]
+        public async Task<ActionResult> GetUserData()
+        {
+            var id = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return Ok(context.Users.Find(id));
+        }
     }
 
 }
