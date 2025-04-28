@@ -99,8 +99,6 @@ namespace OnlineShopOA1135API.Controllers
             {
                 return BadRequest(ex);
             }
-
-
         }
 
         [Authorize(Roles = "админ")]
