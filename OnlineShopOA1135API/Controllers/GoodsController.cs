@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace OnlineShopOA1135API.Controllers
 {
@@ -14,17 +15,6 @@ namespace OnlineShopOA1135API.Controllers
             this.context = context;
         }
 
-        [HttpPost("FindGoods")] //поиск товаров надо сделать
-        public async Task<ActionResult> FindGoods(Good good)
-        {
-            return Ok();
-        }
-        //хз надо ил тут но нужна фильтрация
-
-
-
-
-        
-
+     
     }
 }

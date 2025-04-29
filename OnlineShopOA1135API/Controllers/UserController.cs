@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.SymbolStore;
 using System.Security.Claims;
 
 namespace OnlineShopOA1135API.Controllers
@@ -27,8 +28,7 @@ namespace OnlineShopOA1135API.Controllers
                 return Unauthorized("Не удалось получить UserId."); // Или другое сообщение об ошибке
             }
 
-            Order activeOrder = await context.Orders
-           .FirstOrDefaultAsync(o => o.UserId == userId); // Предполагаем, что у Order есть поле IsCompleted
+            Order activeOrder = await context.Orders.FirstOrDefaultAsync(o => o.UserId == userId); // Предполагаем, что у Order есть поле IsCompleted
 
             // 3. Если активной корзины нет, создаем новую.
             if (activeOrder == null)
@@ -109,7 +109,7 @@ namespace OnlineShopOA1135API.Controllers
           await context.SaveChangesAsync();
 
           return Ok("Товар добавлен в корзину.");*/
-    }
+    
 
         [HttpPut("GetRatingForGood")] //возможность поставить оценку товару??
         public async Task<ActionResult> GetRatingForGood(Good good)
@@ -148,6 +148,36 @@ namespace OnlineShopOA1135API.Controllers
         {
             var id = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             return Ok(context.Users.Find(id));
+        }
+
+
+        [HttpPost("FiltGoodsByCat")] //фильтрация 
+        public async Task<ActionResult<IEnumerable<Good>>> FiltGoodsByCat([FromBody] List<int?> categoryIds)
+        {
+            IQueryable<Good> query = context.Goods.Include(g => g.Category);
+
+            if (categoryIds != null && categoryIds.Any())
+            {
+                query = query.Where(g => categoryIds.Contains(g.CategoryId));
+            }
+
+            List<Good> goods = await query.ToListAsync();
+
+            return goods;
+        }
+
+        [HttpPost("FindGoods")]
+        public async Task<ActionResult<IEnumerable<Good>>> FindGoods([FromBody] string goodsTitle)
+        {
+            IQueryable<Good> query = context.Goods;
+            if (goodsTitle != null)
+            {
+                query = query.Where(g => g.Title.Contains(goodsTitle));
+            }
+
+            List<Good> goods = await query.ToListAsync();
+
+            return goods;
         }
     }
 
