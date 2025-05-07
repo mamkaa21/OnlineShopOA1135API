@@ -5,18 +5,18 @@ namespace OnlineShopOA1135API;
 
 public partial class OrderGoodsCross
 {
-    public int? OrderId { get; set; }
+    public int OrderId { get; set; }
 
-    public int? GoodsId { get; set; }
+    public int GoodsId { get; set; }
 
-    public virtual Good? Goods { get; set; }
+    public int? Quantity { get; set; }
 
-    public virtual Order? Order { get; set; } 
-    //public int Quantity { get; set; } надо в бд добавить
+    public virtual Good Goods { get; set; } = null!;
+
+    public virtual Order Order { get; set; } = null!;
 }
-// DTO (Data Transfer Object) для добавления товара в корзину.
 public class AddToCartRequest
 {
     public int GoodId { get; set; }
-    // Добавлено количество товара
+    public int Quantity { get; set; }
 }

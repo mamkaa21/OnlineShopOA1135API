@@ -189,8 +189,8 @@ namespace OnlineShopOA1135API.Controllers
         public async Task<List<Order>> GetOrder()
         {
             await Task.Delay(10);
-            var order = context.Orders.ToList();
-            return order;
+            var order = context.Orders.ToList().Where(s => s.Status == "активный заказ");
+            return order.ToList();
         }
 
    

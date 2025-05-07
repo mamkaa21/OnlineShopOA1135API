@@ -95,27 +95,30 @@ public partial class OnlineShopOa1135Context : DbContext
 
         modelBuilder.Entity<OrderGoodsCross>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("OrderGoodsCross");
+            entity.HasKey(e => new { e.OrderId, e.GoodsId })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+            entity.ToTable("OrderGoodsCross");
 
             entity.HasIndex(e => e.GoodsId, "FK_OrderGoodsCross_Goods_Id");
 
-            entity.HasIndex(e => e.OrderId, "FK_OrderGoodsCross_Order_Id");
-
-            entity.Property(e => e.GoodsId)
-                .HasColumnType("int(11)")
-                .HasColumnName("Goods_Id");
             entity.Property(e => e.OrderId)
                 .HasColumnType("int(11)")
                 .HasColumnName("Order_Id");
+            entity.Property(e => e.GoodsId)
+                .HasColumnType("int(11)")
+                .HasColumnName("Goods_Id");
+            entity.Property(e => e.Quantity).HasColumnType("int(11)");
 
-            entity.HasOne(d => d.Goods).WithMany()
+            entity.HasOne(d => d.Goods).WithMany(p => p.OrderGoodsCrosses)
                 .HasForeignKey(d => d.GoodsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderGoodsCross_Goods_Id");
 
-            entity.HasOne(d => d.Order).WithMany()
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderGoodsCrosses)
                 .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderGoodsCross_Order_Id");
         });
 
