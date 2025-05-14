@@ -43,6 +43,7 @@ namespace OnlineShopOA1135API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [Authorize(Roles = "админ")]
         [HttpPut("EditGoods")]
         public async Task<ActionResult> EditGoods(Good good)
