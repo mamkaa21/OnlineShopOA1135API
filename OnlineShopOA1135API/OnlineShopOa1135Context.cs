@@ -24,6 +24,8 @@ public partial class OnlineShopOa1135Context : DbContext
 
     public virtual DbSet<OrderGoodsCross> OrderGoodsCrosses { get; set; }
 
+    public virtual DbSet<Review> Reviews { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -63,7 +65,6 @@ public partial class OnlineShopOa1135Context : DbContext
             entity.Property(e => e.Image).HasColumnType("mediumblob");
             entity.Property(e => e.Price).HasPrecision(10);
             entity.Property(e => e.Rating).HasColumnType("int(11)");
-            entity.Property(e => e.Review).HasMaxLength(255);
             entity.Property(e => e.Title).HasMaxLength(255);
 
             entity.HasOne(d => d.Category).WithMany(p => p.Goods)
@@ -119,6 +120,38 @@ public partial class OnlineShopOa1135Context : DbContext
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderGoodsCross_Order_Id");
+        });
+
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("Review");
+
+            entity.HasIndex(e => e.GoodId, "Fk_Good_idx");
+
+            entity.HasIndex(e => e.UserId, "Id_idx");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnType("int(11)");
+            entity.Property(e => e.GoodId)
+                .HasColumnType("int(11)")
+                .HasColumnName("Good_Id");
+            entity.Property(e => e.Text).HasColumnType("text");
+            entity.Property(e => e.UserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("User_Id");
+
+            entity.HasOne(d => d.Good).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.GoodId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Review_Goods_Id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Review_User_Id");
         });
 
         modelBuilder.Entity<Role>(entity =>

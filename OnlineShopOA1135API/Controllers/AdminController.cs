@@ -33,7 +33,7 @@ namespace OnlineShopOA1135API.Controllers
             {
                 var goodNew = new Good { Title = good.Title, 
                     CategoryId = good.CategoryId, Price = good.Price,
-                    Amount = good.Amount, Description =  good.Description, Image = good.Image, Review = good.Review, Rating = good.Rating };
+                    Amount = good.Amount, Description =  good.Description, Image = good.Image, Rating = good.Rating };
                 context.Goods.Add(goodNew);
                 await context.SaveChangesAsync();
                 return Ok("Успешно");

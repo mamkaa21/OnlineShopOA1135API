@@ -19,7 +19,10 @@ public partial class User
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
     public virtual Role? Role { get; set; }
+
     public static explicit operator UserModel(User user)
     {
         return new UserModel
@@ -50,5 +53,7 @@ public partial class UserModel
     public string? Email { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
 

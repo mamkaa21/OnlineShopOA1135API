@@ -19,13 +19,13 @@ public partial class Good
 
     public byte[]? Image { get; set; }
 
-    public string? Review { get; set; }
-
     public int? Rating { get; set; }
 
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<OrderGoodsCross> OrderGoodsCrosses { get; set; } = new List<OrderGoodsCross>();
+
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 }
 public class GoodModel
 {
@@ -43,7 +43,9 @@ public class GoodModel
 
     public byte[]? Image { get; set; }
 
-    public string? Review { get; set; }
-
     public int? Rating { get; set; }
+
+    public virtual ICollection<OrderGoodsCross> OrderGoodsCrosses { get; set; } = new List<OrderGoodsCross>();
+
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

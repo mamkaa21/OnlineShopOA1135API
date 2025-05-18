@@ -89,11 +89,16 @@ namespace OnlineShopOA1135API.Controllers
         }
 
         [HttpPut("CreateReviewByGood")]
-        public async Task<ActionResult> CreateReviewByGood(Good good)
+        public async Task<ActionResult> CreateReviewByGood(Review review) 
         {
             try
             {
-                context.Goods.Update(good); //типа добавили и обновили товар - теперь у него есть отзыв
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return Unauthorized("error");
+                }
+                context.Reviews.Add(review); //типа добавили и обновили товар - теперь у него есть отзыв
                 await context.SaveChangesAsync();
                 return Ok("Успешно");
             }
