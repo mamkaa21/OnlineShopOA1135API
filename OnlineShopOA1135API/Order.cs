@@ -9,8 +9,6 @@ public partial class Order
 
     public int? UserId { get; set; }
 
-    public int? CountProduct { get; set; }
-
     public string? Status { get; set; }
 
     public DateTime? DateCreated { get; set; }

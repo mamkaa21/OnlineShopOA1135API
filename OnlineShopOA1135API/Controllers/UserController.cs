@@ -116,7 +116,7 @@ namespace OnlineShopOA1135API.Controllers
         public async Task<List<Order>> GetOrder()
         {
             await Task.Delay(10);
-            var order = context.Orders.ToList();
+            var order = context.Orders.Include(s => s.OrderGoodsCrosses).ToList(); 
 
             return order;
         }

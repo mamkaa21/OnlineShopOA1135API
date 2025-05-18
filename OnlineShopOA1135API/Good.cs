@@ -27,7 +27,6 @@ public partial class Good
 
     public virtual ICollection<OrderGoodsCross> OrderGoodsCrosses { get; set; } = new List<OrderGoodsCross>();
 }
-
 public class GoodModel
 {
     public int Id { get; set; }
