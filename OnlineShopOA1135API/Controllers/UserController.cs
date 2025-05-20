@@ -130,7 +130,7 @@ namespace OnlineShopOA1135API.Controllers
         public async Task<int?> GetCount(int userId)
         {
             await Task.Delay(10);
-            var order = context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "корзина");
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "корзина");
             var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id);
             int? count = 0;
             foreach(var g in cr)
@@ -140,6 +140,15 @@ namespace OnlineShopOA1135API.Controllers
             return count;
         }
 
+        [HttpGet("GetGoodByOrder/{userId}")]
+        public async Task<List<OrderGoodsCross>> GetGoodByOrder(int userId)
+        {
+            await Task.Delay(10);
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "корзина");
+            var cr =  context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s =>  s.Goods);
+            
+            return cr.ToList();
+        }
 
         [HttpPost("FiltGoodsByCat")] //фильтрация 
         public async Task<ActionResult<IEnumerable<Good>>> FiltGoodsByCat([FromBody] List<int?> categoryIds)
