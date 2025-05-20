@@ -89,7 +89,7 @@ namespace OnlineShopOA1135API.Controllers
         }
 
         [HttpPut("CreateReviewByGood")]
-        public async Task<ActionResult> CreateReviewByGood(Review review) 
+        public async Task<ActionResult> CreateReviewByGood(Review review)
         {
             try
             {
@@ -117,38 +117,38 @@ namespace OnlineShopOA1135API.Controllers
             return Ok(context.Users.Find(id));
         }
 
-        [HttpGet("GetOrderBasket")]
-        public async Task<List<Order>> GetOrder()
-        {
-            await Task.Delay(10);
-            var order = context.Orders.Include(s => s.OrderGoodsCrosses).ToList(); 
-
-            return order;
-        }
-
-        [HttpGet("GetOrderBasketCount/{userId}")]
+        [HttpGet("GetOrderBasketCount/{userId}")] //получить кол-во товаров в  корзине
         public async Task<int?> GetCount(int userId)
         {
             await Task.Delay(10);
             var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "корзина");
             var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id);
             int? count = 0;
-            foreach(var g in cr)
+            foreach (var g in cr)
             {
                 count += g.Quantity;
             }
             return count;
         }
 
-        [HttpGet("GetGoodByOrder/{userId}")]
+
+        [HttpGet("GetGoodByOrder/{userId}")] //получить товары в корзине
         public async Task<List<OrderGoodsCross>> GetGoodByOrder(int userId)
         {
             await Task.Delay(10);
             var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "корзина");
-            var cr =  context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s =>  s.Goods).ToList();
-            
+            var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods).ToList();
+
             return cr;
         }
+
+
+        [HttpPut("DoOrder")] //оформить заказ (просто поменять статус лол)
+        //public async Task<List<Order>> DoOrder() 
+        //{
+            
+        //}
+
 
         [HttpPost("FiltGoodsByCat")] //фильтрация 
         public async Task<ActionResult<IEnumerable<Good>>> FiltGoodsByCat([FromBody] List<int?> categoryIds)
