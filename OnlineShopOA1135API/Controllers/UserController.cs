@@ -111,7 +111,7 @@ namespace OnlineShopOA1135API.Controllers
         //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
 
         [HttpGet]
-        public async Task<ActionResult> GetUserData()
+        public async Task<ActionResult<User>> GetUserData()
         {
             var id = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             return Ok(context.Users.Find(id));
@@ -145,9 +145,9 @@ namespace OnlineShopOA1135API.Controllers
         {
             await Task.Delay(10);
             var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "корзина");
-            var cr =  context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s =>  s.Goods);
+            var cr =  context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s =>  s.Goods).ToList();
             
-            return cr.ToList();
+            return cr;
         }
 
         [HttpPost("FiltGoodsByCat")] //фильтрация 
