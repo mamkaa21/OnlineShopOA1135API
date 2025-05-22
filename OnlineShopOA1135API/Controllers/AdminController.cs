@@ -191,7 +191,7 @@ namespace OnlineShopOA1135API.Controllers
         public async Task<List<OrderGoodsCross>> GetOrderActive()
         {
             await Task.Delay(10);
-            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "корзина");
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "активные");
             var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
 
             return cr;
@@ -207,7 +207,24 @@ namespace OnlineShopOA1135API.Controllers
             return cr;
         }
 
-        
+
+        [HttpPut("StatusOrderFromDontActive")] //оформить заказ (просто поменять статус лол)
+        public async Task<ActionResult> StatusOrderFromDontActive(Order order)
+        {
+            // Находим заказ по ID
+            var basket = context.Orders.FirstOrDefault(o => o.Id == order.Id);
+            if (basket == null)
+                return BadRequest("error");
+
+            if (basket.Status == "активные")
+            {
+                basket.Status = "выполненные";
+                context.Orders.Update(basket);
+                await context.SaveChangesAsync();
+            }
+            await context.SaveChangesAsync();
+            return Ok("Успешно");
+        }
 
 
 

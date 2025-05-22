@@ -18,7 +18,7 @@ namespace OnlineShopOA1135API.Controllers
             this.context = context;
         }
 
-        [HttpPost("CreateOrder")]
+        [HttpPost("AddToBasket")]
         public async Task<ActionResult> AddToBasket([FromBody] AddToCartRequest request)
         {
             if (!ModelState.IsValid)
@@ -65,10 +65,10 @@ namespace OnlineShopOA1135API.Controllers
                     Quantity = request.Quantity
                 };
                 context.OrderGoodsCrosses.Add(orderGoodsCross);
+                await context.SaveChangesAsync();
             }
 
             await context.SaveChangesAsync();
-
             return Ok("Товар добавлен в корзину.");
         }
 
@@ -143,11 +143,23 @@ namespace OnlineShopOA1135API.Controllers
         }
 
 
-        [HttpPut("DoOrder")] //оформить заказ (просто поменять статус лол)
-        //public async Task<List<Order>> DoOrder() 
-        //{
-            
-        //}
+        [HttpPut("StatusOrderFromActive")] //оформить заказ (просто поменять статус лол)
+        public async Task<ActionResult> StatusOrderFromActive(Order order)
+        {
+            // Находим заказ по ID
+             var basket = context.Orders.FirstOrDefault(o => o.Id == order.Id);
+            if (basket == null)
+                return BadRequest("error"); 
+        
+            if (basket.Status == "корзина")
+            {
+                basket.Status = "активные"; 
+                context.Orders.Update(basket);
+                await context.SaveChangesAsync();
+            }
+            await context.SaveChangesAsync();
+            return Ok("Успешно");         
+        }
 
 
         [HttpPost("FiltGoodsByCat")] //фильтрация 
