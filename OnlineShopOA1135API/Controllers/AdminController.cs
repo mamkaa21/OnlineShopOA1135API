@@ -227,13 +227,7 @@ namespace OnlineShopOA1135API.Controllers
 
 
 
-        [HttpPut("UpdateStatusOrder")] //скорее всего будет чекбок = если галка есть, то заказ помечается как выполненым и "удаляется" и переносится в графу выполненных заказов/история
-        public async Task<ActionResult> UpdateStatusOrder(Order order)
-        {
-            context.Orders.Update(order);
-            await context.SaveChangesAsync();
-            return Ok();
-        }
+      
 
 
     }

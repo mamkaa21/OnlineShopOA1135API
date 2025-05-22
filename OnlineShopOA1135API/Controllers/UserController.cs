@@ -149,34 +149,30 @@ namespace OnlineShopOA1135API.Controllers
             {
                 return NotFound("Заказ не найден");
             }
-
-            // Проверка, что текущий статус - "cart"
+          
             if (cr.Order.Status == "корзина")
             {
-                cr.Order.Status = "активные";
-
-                // Сохраняем изменения
+                cr.Order.Status = "активные";             
                 await context.SaveChangesAsync();
             }
             return Ok(new { message = "Заказ активирован", order });
         }
 
-        [HttpGet("GetOrderDontActive")]  //получить выполненные заказы(в админку надо перенести)
-        public async Task<List<OrderGoodsCross>> GetOrderDontActive()
+        [HttpGet("GetOrderDontActive/{userId}")]  //получить выполненные заказы
+        public async Task<List<OrderGoodsCross>> GetOrderDontActive(int userId)
         {
             await Task.Delay(10);
-            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "выполненные");
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "выполненные");
             var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
             return cr;
         }
 
-        [HttpGet("GetOrderActive")] //получить активные заказы(в админку надо перенести)
-        public async Task<List<OrderGoodsCross>> GetOrderActive()
+        [HttpGet("GetOrderActive/{userId}")] //получить активные заказы
+        public async Task<List<OrderGoodsCross>> GetOrderActive(int userId)
         {
             await Task.Delay(10);
-            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "активные");
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId && s.Status == "активные");
             var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
-
             return cr;
         }
 
@@ -186,6 +182,21 @@ namespace OnlineShopOA1135API.Controllers
             try
             {
                 context.Users.Update(user);
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPut("AddQuantity")]
+        public async Task<ActionResult> AddQuantity(OrderGoodsCross cross)
+        {
+            try
+            {
+                context.OrderGoodsCrosses.Update(cross);
                 await context.SaveChangesAsync();
                 return Ok("Успешно");
             }
