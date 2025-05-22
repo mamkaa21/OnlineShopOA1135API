@@ -108,8 +108,6 @@ namespace OnlineShopOA1135API.Controllers
             }
         }
 
-        //контроллер с добалвением товара в корзину + оставить отзыв? + получить инфу о поль-вателе
-
         [HttpGet]
         public async Task<ActionResult<User>> GetUserData()
         {
@@ -131,7 +129,6 @@ namespace OnlineShopOA1135API.Controllers
             return count;
         }
 
-
         [HttpGet("GetGoodByOrder/{userId}")] //получить товары в корзине
         public async Task<List<OrderGoodsCross>> GetGoodByOrder(int userId)
         {
@@ -141,27 +138,7 @@ namespace OnlineShopOA1135API.Controllers
 
             return cr;
         }
-
-
-        //[HttpPut("StatusOrderFromActive")] //оформить заказ (просто поменять статус лол)
-        //public async Task<ActionResult> StatusOrderFromActive(OrderGoodsCross cross)
-        //{
-        //    // Находим заказ по ID
-        //   // var userId = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //   // //return Ok(context.Users.Find(id));
-        //   // var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId);
-        //   // var basket = context.OrderGoodsCrosses.FirstOrDefault(o => o.OrderId == order.Id && order.Status == "корзина");
-        //   // if (basket == null)
-        //   //     return BadRequest("error"); 
-        //   //else
-        //   //{
-        //        cross.Order.Status = "активные"; 
-        //        context.Orders.Update(cross);
-        //        await context.SaveChangesAsync();
-        //   //}
-        //    await context.SaveChangesAsync();
-        //    return Ok("Успешно");         
-        //}
+  
         [HttpPut("StatusOrderFromActive/{userId}")]
         public async Task<IActionResult> StatusOrderFromActive(int userId)
         {
@@ -183,10 +160,43 @@ namespace OnlineShopOA1135API.Controllers
             }
             return Ok(new { message = "Заказ активирован", order });
         }
-    
+
+        [HttpGet("GetOrderDontActive")]  //получить выполненные заказы(в админку надо перенести)
+        public async Task<List<OrderGoodsCross>> GetOrderDontActive()
+        {
+            await Task.Delay(10);
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "выполненные");
+            var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
+            return cr;
+        }
+
+        [HttpGet("GetOrderActive")] //получить активные заказы(в админку надо перенести)
+        public async Task<List<OrderGoodsCross>> GetOrderActive()
+        {
+            await Task.Delay(10);
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "активные");
+            var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
+
+            return cr;
+        }
+
+        [HttpPut("SaveChangedByUserWin")]
+        public async Task<ActionResult> SaveChangedByUserWin(User user)
+        {
+            try
+            {
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+                return Ok("Успешно");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
 
-    [HttpPost("FiltGoodsByCat")] //фильтрация 
+        [HttpPost("FiltGoodsByCat")] //фильтрация 
         public async Task<ActionResult<IEnumerable<Good>>> FiltGoodsByCat([FromBody] List<int?> categoryIds)
         {
             IQueryable<Good> query = context.Goods.Include(g => g.Category);
@@ -215,6 +225,5 @@ namespace OnlineShopOA1135API.Controllers
             return goods;
         }
     }
-
 }
 

@@ -207,8 +207,7 @@ namespace OnlineShopOA1135API.Controllers
             return cr;
         }
 
-
-        [HttpPut("StatusOrderFromDontActive")] //оформить заказ (просто поменять статус лол)
+        [HttpPut("StatusOrderFromDontActive")] // заказ выполнен (просто поменять статус лол)
         public async Task<ActionResult> StatusOrderFromDontActive(Order order)
         {
             // Находим заказ по ID
