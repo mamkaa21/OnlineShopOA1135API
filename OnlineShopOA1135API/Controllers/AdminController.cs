@@ -119,7 +119,7 @@ namespace OnlineShopOA1135API.Controllers
         }
 
         [Authorize(Roles = "админ")]
-        [HttpDelete("DeleteCategories")]
+        [HttpPost("DeleteCategories")]
         public async Task<ActionResult> DeleteCategories(Category category)
         {
             try
@@ -169,7 +169,7 @@ namespace OnlineShopOA1135API.Controllers
         }
 
         [Authorize(Roles = "админ")]
-        [HttpDelete("DeleteUsers")]
+        [HttpPost("DeleteUsers")]
         public async Task<ActionResult> DeleteUsers(User user)
         {
             try

@@ -217,9 +217,16 @@ namespace OnlineShopOA1135API.Controllers
                 query = query.Where(g => categoryIds.Contains(g.CategoryId));
             }
 
+            else
+            {
+                var good = context.Goods.Include(s => s.Category).ToList();
+                return good;
+            }
+               
             List<Good> goods = await query.ToListAsync();
+            return goods; 
 
-            return goods;
+          
         }
 
         [HttpPost("FindGoods")]
