@@ -143,26 +143,50 @@ namespace OnlineShopOA1135API.Controllers
         }
 
 
-        [HttpPut("StatusOrderFromActive")] //оформить заказ (просто поменять статус лол)
-        public async Task<ActionResult> StatusOrderFromActive(Order order)
+        //[HttpPut("StatusOrderFromActive")] //оформить заказ (просто поменять статус лол)
+        //public async Task<ActionResult> StatusOrderFromActive(OrderGoodsCross cross)
+        //{
+        //    // Находим заказ по ID
+        //   // var userId = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        //   // //return Ok(context.Users.Find(id));
+        //   // var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId);
+        //   // var basket = context.OrderGoodsCrosses.FirstOrDefault(o => o.OrderId == order.Id && order.Status == "корзина");
+        //   // if (basket == null)
+        //   //     return BadRequest("error"); 
+        //   //else
+        //   //{
+        //        cross.Order.Status = "активные"; 
+        //        context.Orders.Update(cross);
+        //        await context.SaveChangesAsync();
+        //   //}
+        //    await context.SaveChangesAsync();
+        //    return Ok("Успешно");         
+        //}
+        [HttpPut("StatusOrderFromActive/{userId}")]
+        public async Task<IActionResult> StatusOrderFromActive(int userId)
         {
-            // Находим заказ по ID
-             var basket = context.Orders.FirstOrDefault(o => o.Id == order.Id);
-            if (basket == null)
-                return BadRequest("error"); 
-        
-            if (basket.Status == "корзина")
+            // Поиск заказа по ID
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.UserId == userId);
+            var cr = await context.OrderGoodsCrosses.FirstOrDefaultAsync(s => s.OrderId == order.Id);
+            if (cr == null)
             {
-                basket.Status = "активные"; 
-                context.Orders.Update(basket);
+                return NotFound("Заказ не найден");
+            }
+
+            // Проверка, что текущий статус - "cart"
+            if (cr.Order.Status == "корзина")
+            {
+                cr.Order.Status = "активные";
+
+                // Сохраняем изменения
                 await context.SaveChangesAsync();
             }
-            await context.SaveChangesAsync();
-            return Ok("Успешно");         
+            return Ok(new { message = "Заказ активирован", order });
         }
+    
 
 
-        [HttpPost("FiltGoodsByCat")] //фильтрация 
+    [HttpPost("FiltGoodsByCat")] //фильтрация 
         public async Task<ActionResult<IEnumerable<Good>>> FiltGoodsByCat([FromBody] List<int?> categoryIds)
         {
             IQueryable<Good> query = context.Goods.Include(g => g.Category);
