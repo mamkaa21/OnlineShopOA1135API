@@ -188,21 +188,23 @@ namespace OnlineShopOA1135API.Controllers
         //запросы к заказу(order)     
 
         [HttpGet("GetOrderActive")] //получить активные заказы(в админку надо перенести)
-        public async Task<List<Order>> GetOrderActive()
+        public async Task<List<OrderGoodsCross>> GetOrderActive()
         {
             await Task.Delay(10);
-            var order = context.Orders.Include(s => s.OrderGoodsCrosses).Where(s => s.Status == "активные").ToList();
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "корзина");
+            var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
 
-            return order;
+            return cr;
         }
 
         [HttpGet("GetOrderDontActive")]  //получить выполненные заказы(в админку надо перенести)
-        public async Task<List<Order>> GetOrderDontActive()
+        public async Task<List<OrderGoodsCross>> GetOrderDontActive()
         {
             await Task.Delay(10);
-            var order = context.Orders.Include(s => s.OrderGoodsCrosses).Where(s => s.Status == "выполненные").ToList();
+            var order = await context.Orders.FirstOrDefaultAsync(s => s.Status == "выполненные");
+            var cr = context.OrderGoodsCrosses.Where(s => s.OrderId == order.Id).Include(s => s.Goods.Category).ToList();
 
-            return order;
+            return cr;
         }
 
         
